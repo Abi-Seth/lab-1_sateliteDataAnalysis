@@ -17,3 +17,12 @@ OUTPUT_FILE1="analyzed_data/highest_temp.csv"
 echo "Extracting the top 10 highest temperatures..."
 
 awk -F',' 'NR==1 {print; next} {print | "sort -t, -k3,3nr"}' raw_data/satelite_temperature_data.csv | head -n 11 > analyzed_data/highest_temp.csv
+
+COUNTRY="Ethiopia"
+echo "Extracting data for $COUNTRY and sorting by humidity..."
+
+head -n 1 raw_data/satelite_temperature_data.csv > analyzed_data/humidity_data_Ethiopia.csv
+
+grep '^Ethiopia,' raw_data/satelite_temperature_data.csv | tail -n +2 >> analyzed_data/humidity_data_Ethiopia.csv
+
+(head -n 1 analyzed_data/humidity_data_Ethiopia.csv && tail -n +2 analyzed_data/humidity_data_Ethiopia.csv | sort -t, -k4,4nr) | tee temporay_data_Ethiopia.csv && mv temporay_data_Ethiopia.csv analyzed_data/humidity_data_Ethiopia.csv
